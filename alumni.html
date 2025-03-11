@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Dashboard - iACADEMY Career Connect</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/alumni.css">
+</head>
+<body>
+    <header>
+        <h1>iACADEMY Career Connect</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </header>
+    
+    <main>
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('feed')">Feed</button>
+            <button class="tab-button" onclick="showTab('profile')">Profile</button>
+        </div>
+
+        <!-- Newsfeed -->
+        <section id="feed" class="tab-content active">
+            <div>
+                <textarea id="postText" placeholder="What's on your mind?"></textarea>
+                <input type="file" id="postFile" accept="image/*, .pdf, .docx, .mp4, .mov" />
+                <button onclick="submitPost()">Post</button>
+            </div>            
+            <div id="feedPosts">
+                <!-- Posts will load here -->
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="tab-content">
+            <h2>My Profile</h2>
+            <div class="profile-info">
+                <img id="profilePicture" src="assets/default-profile.png" alt="Profile Picture">
+                <h3 id="profileName">Loading...</h3>
+                <p id="aboutMe">Loading...</p>
+                <h4>Skills:</h4>
+                <ul id="skillsList"></ul>
+                <h4>Portfolio:</h4>
+                <ul id="portfolioLinks"></ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/alumni.js"></script>
+</body>
+</html>
