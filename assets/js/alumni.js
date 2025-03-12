@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadFeed();
 });
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzjAbreuLAhiyZ1N7UEGK2JhipyiNkAKjFOZTHNSwP6U0YFoCr44ayBl2qor-d87yYlig/exec";  // Replace with your actual deployed URL
+const API_URL = "https://script.google.com/macros/s/AKfycbwJTUYCp47JjCN52nRe_d8qzLwW0jpYEPaB7gxwqvbD_kUdbDxE-w7LT6ZIkpilpGFpgw/exec";  // Replace with your actual deployed URL
 
 // Toggle between Feed & Profile tabs
 function showTab(tab) {
@@ -28,24 +28,35 @@ function loadProfile() {
 
 // Load feed from Google Sheets
 function loadFeed() {
-    fetch(API_URL + "?action=getPosts")
-        .then(response => response.json())
-        .then(posts => {
-            let feed = document.getElementById("feedPosts");
-            feed.innerHTML = ""; // Clear feed
+    fetch(API_URL, {
+        method: "POST",
+        body: new URLSearchParams({ action: "getPosts" })  // Send as POST request
+    })
+    .then(response => response.json())  // Expect JSON directly
+    .then(posts => {
+        console.log("Parsed posts:", posts);  // Debugging parsed JSON
 
-            posts.forEach(post => {
-                let postElement = document.createElement("div");
-                postElement.classList.add("post");
-                postElement.innerHTML = `
-                    <p><strong>${post.email}</strong></p>
-                    <p>${post.content}</p>
-                    ${post.mediaUrl ? `<img src="${post.mediaUrl}" width="100%">` : ""}
-                    <button onclick="deletePost(${post.postId})">🗑️</button>
-                `;
-                feed.appendChild(postElement);
-            });
+        let feed = document.getElementById("feedPosts");
+        feed.innerHTML = ""; // Clear feed
+
+        if (!Array.isArray(posts)) {
+            console.error("Unexpected API response format:", posts);
+            return;
+        }
+
+        posts.forEach(post => {
+            let postElement = document.createElement("div");
+            postElement.classList.add("post");
+            postElement.innerHTML = `
+                <p><strong>${post.email}</strong></p>
+                <p>${post.content}</p>
+                ${post.mediaUrl ? `<img src="${post.mediaUrl}" width="100%">` : ""}
+                <button onclick="deletePost(${post.postId})">🗑️</button>
+            `;
+            feed.appendChild(postElement);
         });
+    })
+    .catch(error => console.error("Error loading feed:", error));
 }
 
 // Submit new post
